@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Orders — The General Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <header class="awning">
+    <div class="awning__inner">
+      <a class="brand" href="/index.html">
+        <span class="brand__mark">GS</span>
+        <span class="brand__name">The General Store</span>
+      </a>
+      <div class="account-slot" id="account-slot"></div>
+    </div>
+  </header>
+
+  <main class="account-page account-page--wide">
+    <h1>My Orders</h1>
+    <p class="page-sub">Every order placed while signed in to this account.</p>
+    <div id="order-list">
+      <p>Loading\u2026</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>The General Store &middot; demo storefront &middot; no real payments are processed</p>
+  </footer>
+
+  <script src="/js/session.js"></script>
+  <script src="/js/account.js"></script>
+</body>
+</html>

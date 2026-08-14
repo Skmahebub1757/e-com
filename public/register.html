@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create an account — The General Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <header class="awning">
+    <div class="awning__inner">
+      <a class="brand" href="/index.html">
+        <span class="brand__mark">GS</span>
+        <span class="brand__name">The General Store</span>
+      </a>
+      <div class="account-slot" id="account-slot"></div>
+    </div>
+  </header>
+
+  <main class="account-page">
+    <h1>Create your account</h1>
+    <p class="page-sub">Shop as a buyer, or open a stall and sell as a seller.</p>
+
+    <div class="account-card">
+      <div class="role-tabs" role="tablist" aria-label="Account type">
+        <button type="button" class="role-tab is-active" data-role="buyer" role="tab" aria-selected="true">I'm a Buyer</button>
+        <button type="button" class="role-tab" data-role="seller" role="tab" aria-selected="false">I'm a Seller</button>
+      </div>
+
+      <p class="form-error" id="form-error"></p>
+      <p class="form-success" id="form-success"></p>
+
+      <form id="register-form">
+        <label class="field">
+          <span>Full name</span>
+          <input type="text" name="name" required autocomplete="name" />
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" name="password" minlength="6" required autocomplete="new-password" />
+          <span class="field-hint">At least 6 characters.</span>
+        </label>
+        <label class="field" id="shop-name-field" hidden>
+          <span>Shop name</span>
+          <input type="text" name="shopName" autocomplete="organization" />
+          <span class="field-hint">Shown on your listings, e.g. "Cedar & Co."</span>
+        </label>
+
+        <button type="submit" class="btn btn--primary btn--block" id="submit-btn">Create account</button>
+      </form>
+    </div>
+
+    <p class="account-page-footer">Already have an account? <a href="/login.html">Sign in</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <p>The General Store &middot; demo storefront &middot; no real payments are processed</p>
+  </footer>
+
+  <script src="/js/session.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

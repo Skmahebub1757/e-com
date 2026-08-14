@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Shop — The General Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <header class="awning">
+    <div class="awning__inner">
+      <a class="brand" href="/index.html">
+        <span class="brand__mark">GS</span>
+        <span class="brand__name">The General Store</span>
+      </a>
+      <div class="account-slot" id="account-slot"></div>
+    </div>
+  </header>
+
+  <main class="account-page account-page--wide">
+    <h1>My Shop</h1>
+    <p class="page-sub" id="shop-sub">Manage the listings only you can see and edit.</p>
+
+    <div id="seller-gate" class="account-card" hidden>
+      <p>This page is for seller accounts only.</p>
+      <p><a href="/login.html">Sign in as a seller</a> or <a href="/register.html">open a seller account</a>.</p>
+    </div>
+
+    <div id="dashboard" class="dashboard-layout" hidden>
+      <div class="account-card">
+        <h2 id="form-mode" style="font-size:17px; margin-bottom:14px;">New listing</h2>
+        <p class="form-error" id="form-error"></p>
+        <p class="form-success" id="form-success"></p>
+
+        <form id="listing-form">
+          <input type="hidden" id="listing-id" />
+          <label class="field">
+            <span>Item name</span>
+            <input type="text" id="f-name" required />
+          </label>
+          <label class="field">
+            <span>Category</span>
+            <input type="text" id="f-category" required placeholder="e.g. Kitchen, Outdoor, Home" />
+          </label>
+          <label class="field">
+            <span>Price (USD)</span>
+            <input type="number" id="f-price" min="0" step="0.01" required />
+          </label>
+          <label class="field">
+            <span>Stock</span>
+            <input type="number" id="f-stock" min="0" required />
+          </label>
+          <label class="field">
+            <span>Image URL</span>
+            <input type="text" id="f-image" placeholder="https://..." />
+          </label>
+          <label class="field">
+            <span>Description</span>
+            <textarea id="f-description" rows="3"></textarea>
+          </label>
+
+          <button type="submit" class="btn btn--primary btn--block" id="submit-btn">Save listing</button>
+          <button type="button" class="btn btn--secondary btn--block" id="cancel-edit-btn" hidden>Cancel edit</button>
+        </form>
+      </div>
+
+      <div>
+        <table class="listings-table">
+          <thead>
+            <tr><th>Item</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr>
+          </thead>
+          <tbody id="listings-body">
+            <tr><td colspan="5">Loading\u2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>The General Store &middot; demo storefront &middot; no real payments are processed</p>
+  </footer>
+
+  <script src="/js/session.js"></script>
+  <script src="/js/seller.js"></script>
+</body>
+</html>
