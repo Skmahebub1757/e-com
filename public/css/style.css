@@ -445,8 +445,21 @@ button {
   justify-content: center;
 }
 .qty-btn:hover { background: var(--line); }
+.qty-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--paper);
+}
 
 .cart-line__qty { min-width: 16px; text-align: center; }
+
+.cart-line__stock-note {
+  grid-column: 1 / -1;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--rust);
+  margin-top: 2px;
+}
 
 .remove-btn {
   margin-left: auto;

@@ -79,10 +79,12 @@ app.post('/api/checkout', optionalAuth, async (req, res) => {
   try {
     await conn.beginTransaction();
 
-    // Look up current prices & stock server-side (never trust client prices)
+    // Look up current prices & stock server-side (never trust client prices).
+    // FOR UPDATE locks these rows until commit/rollback, so two checkouts
+    // racing for the last item can't both succeed.
     const ids = items.map((i) => i.id);
     const [products] = await conn.query(
-      `SELECT id, name, price, stock FROM products WHERE id IN (${ids.map(() => '?').join(',')})`,
+      `SELECT id, name, price, stock FROM products WHERE id IN (${ids.map(() => '?').join(',')}) FOR UPDATE`,
       ids
     );
 

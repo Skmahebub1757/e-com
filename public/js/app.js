@@ -129,6 +129,13 @@
     const product = state.products.find((p) => p.id === id);
     if (!product) return;
     const existing = state.cart.find((i) => i.id === id);
+    const currentQty = existing ? existing.quantity : 0;
+
+    if (currentQty >= product.stock) {
+      flashMaxNotice(id);
+      return;
+    }
+
     if (existing) {
       existing.quantity += 1;
     } else {
@@ -136,12 +143,31 @@
     }
     saveCart();
     renderCart();
+    renderGrid(); // refresh "in cart" state on the card itself
     openCart();
+  }
+
+  function flashMaxNotice(id) {
+    const btn = grid.querySelector(`.add-btn[data-id="${id}"]`);
+    if (!btn) return;
+    const original = btn.textContent;
+    btn.textContent = 'That\u2019s all we have';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.disabled = state.products.find((p) => p.id === id)?.stock <= 0;
+    }, 1100);
   }
 
   function updateQty(id, delta) {
     const item = state.cart.find((i) => i.id === id);
     if (!item) return;
+
+    if (delta > 0) {
+      const product = state.products.find((p) => p.id === id);
+      if (product && item.quantity >= product.stock) return; // already at the stock ceiling
+    }
+
     item.quantity += delta;
     if (item.quantity <= 0) {
       state.cart = state.cart.filter((i) => i.id !== id);
@@ -172,17 +198,22 @@
       checkoutBtn.disabled = true;
     } else {
       checkoutBtn.disabled = false;
-      cartItemsEl.innerHTML = state.cart.map((i) => `
+      cartItemsEl.innerHTML = state.cart.map((i) => {
+        const product = state.products.find((p) => p.id === i.id);
+        const atMax = product && i.quantity >= product.stock;
+        return `
         <div class="cart-line">
           <span class="cart-line__name">${escapeHtml(i.name)}</span>
           <span class="cart-line__price">${money(i.price * i.quantity)}</span>
           <div class="cart-line__controls">
             <button class="qty-btn" data-action="dec" data-id="${i.id}" aria-label="Decrease quantity">&minus;</button>
             <span class="cart-line__qty">${i.quantity}</span>
-            <button class="qty-btn" data-action="inc" data-id="${i.id}" aria-label="Increase quantity">+</button>
+            <button class="qty-btn" data-action="inc" data-id="${i.id}" aria-label="Increase quantity" ${atMax ? 'disabled title="No more in stock"' : ''}>+</button>
             <button class="remove-btn" data-action="remove" data-id="${i.id}">remove</button>
           </div>
-        </div>`).join('');
+          ${atMax ? `<span class="cart-line__stock-note">Last ${product.stock} in stock</span>` : ''}
+        </div>`;
+      }).join('');
 
       cartItemsEl.querySelectorAll('[data-action]').forEach((btn) => {
         const id = Number(btn.dataset.id);
@@ -271,11 +302,37 @@
       await loadProducts(); // refresh stock counts
     } catch (err) {
       checkoutError.textContent = err.message;
+      await reconcileCartWithStock();
     } finally {
       checkoutSubmit.disabled = false;
       checkoutSubmit.textContent = 'Place Order';
     }
   });
+
+  // If checkout fails because stock changed underneath the buyer (someone
+  // else bought the last one first), pull fresh stock and trim the cart to
+  // match reality rather than leaving a cart that can never check out.
+  async function reconcileCartWithStock() {
+    await loadProducts();
+    const adjusted = [];
+    state.cart = state.cart.filter((item) => {
+      const product = state.products.find((p) => p.id === item.id);
+      if (!product || product.stock <= 0) {
+        adjusted.push(`${item.name} sold out and was removed from your cart`);
+        return false;
+      }
+      if (item.quantity > product.stock) {
+        adjusted.push(`${item.name} reduced to ${product.stock} (only that many left)`);
+        item.quantity = product.stock;
+      }
+      return true;
+    });
+    saveCart();
+    renderCart();
+    if (adjusted.length > 0) {
+      checkoutError.textContent = adjusted.join('. ') + '.';
+    }
+  }
 
   // ---------------- Utils ----------------
   function escapeHtml(str) {
