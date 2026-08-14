@@ -6,6 +6,7 @@ const path = require('path');
 const pool = require('./config/db');
 const { requireAuth } = require('./config/authMiddleware');
 const authRoutes = require('./routes/auth');
+const accountRoutes = require('./routes/account');
 const sellerProductRoutes = require('./routes/sellerProducts');
 const orderRoutes = require('./routes/orders');
 
@@ -17,10 +18,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ---------------------------------------------------------------
-// Accounts (buyer + seller registration/login), seller listings,
-// and buyer order history
+// Accounts (buyer + seller registration/login), profile, seller
+// listings, and buyer order history
 // ---------------------------------------------------------------
 app.use('/api/auth', authRoutes);
+app.use('/api/account', accountRoutes);
 app.use('/api/seller/products', sellerProductRoutes);
 app.use('/api/orders', orderRoutes);
 

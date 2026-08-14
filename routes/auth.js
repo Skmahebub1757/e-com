@@ -1,18 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 const { requireAuth } = require('../config/authMiddleware');
+const { signToken } = require('../config/token');
 
 const router = express.Router();
-
-function signToken(user) {
-  return jwt.sign(
-    { id: user.id, name: user.name, email: user.email, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
-}
 
 // POST /api/auth/register
 // body: { name, email, password, role: 'buyer' | 'seller', shopName? }

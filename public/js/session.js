@@ -39,7 +39,7 @@
     return data;
   }
 
-  // Renders the "Sign in" / "Hi, Name" account link that appears in the awning
+  // Renders the "Sign in" / "My Account" account link that appears in the awning
   // on every page. Each page just needs an element with id="account-slot".
   function renderAccountSlot() {
     const el = document.getElementById('account-slot');
@@ -49,10 +49,12 @@
       el.innerHTML = `<a class="account-link" href="/login.html">Sign in</a>`;
       return;
     }
-    const dashboardHref = user.role === 'seller' ? '/seller-dashboard.html' : '/account.html';
-    const dashboardLabel = user.role === 'seller' ? 'My Shop' : 'My Orders';
+    const shopLink = user.role === 'seller'
+      ? `<a class="account-link" href="/seller-dashboard.html">My Shop</a>`
+      : '';
     el.innerHTML = `
-      <a class="account-link" href="${dashboardHref}">${dashboardLabel}</a>
+      <a class="account-link" href="/account.html">My Account</a>
+      ${shopLink}
       <a class="account-link" href="#" id="signout-link">Sign out</a>`;
     document.getElementById('signout-link').addEventListener('click', (e) => {
       e.preventDefault();
@@ -63,5 +65,6 @@
 
   window.Session = Session;
   window.apiRequest = apiRequest;
+  window.renderAccountSlot = renderAccountSlot;
   document.addEventListener('DOMContentLoaded', renderAccountSlot);
 })(window);

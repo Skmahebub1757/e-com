@@ -680,6 +680,70 @@ button {
   box-shadow: var(--shadow-card);
   padding: 30px 28px 28px;
 }
+.account-card--wide { margin-bottom: 30px; }
+
+.account-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+.account-card__head h2 { margin: 0; font-size: 18px; }
+
+.account-section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 30px;
+  align-items: start;
+}
+
+.role-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--line);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.role-badge--seller { background: var(--forest); color: var(--cardstock); }
+
+.stat-row {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; }
+.stat__value {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--forest-dk);
+}
+.stat__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #5A5544;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line-dark);
+  padding-bottom: 10px;
+}
+
+@media (max-width: 760px) {
+  .account-section-grid { grid-template-columns: 1fr; }
+}
 
 .account-page h1 {
   font-size: 26px;
