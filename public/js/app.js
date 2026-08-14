@@ -24,6 +24,7 @@
   const cartTotal = document.getElementById('cart-total');
   const ticketNo = document.getElementById('ticket-no');
   const checkoutBtn = document.getElementById('checkout-btn');
+  const signinNote = document.getElementById('signin-required-note');
 
   const modalScrim = document.getElementById('modal-scrim');
   const modal = document.getElementById('checkout-modal');
@@ -196,8 +197,11 @@
       cartItemsEl.appendChild(cartEmpty);
       cartEmpty.style.display = 'block';
       checkoutBtn.disabled = true;
+      signinNote.hidden = true;
     } else {
-      checkoutBtn.disabled = false;
+      const loggedIn = window.Session && Session.isLoggedIn();
+      checkoutBtn.disabled = !loggedIn;
+      signinNote.hidden = loggedIn;
       cartItemsEl.innerHTML = state.cart.map((i) => {
         const product = state.products.find((p) => p.id === i.id);
         const atMax = product && i.quantity >= product.stock;
@@ -246,10 +250,23 @@
   // ---------------- Checkout modal ----------------
   function openModal() {
     if (state.cart.length === 0) return;
+    if (!(window.Session && Session.isLoggedIn())) {
+      window.location.href = '/login.html';
+      return;
+    }
     checkoutSummary.innerHTML = `<span>${state.cart.reduce((n, i) => n + i.quantity, 0)} item(s)</span><span>${money(cartTotalValue())}</span>`;
     formView.hidden = false;
     successView.hidden = true;
     checkoutError.textContent = '';
+
+    const user = Session.getUser();
+    if (user) {
+      const nameField = checkoutForm.querySelector('[name="name"]');
+      const emailField = checkoutForm.querySelector('[name="email"]');
+      if (nameField && !nameField.value) nameField.value = user.name || '';
+      if (emailField && !emailField.value) emailField.value = user.email || '';
+    }
+
     modal.classList.add('is-open');
     modalScrim.classList.add('is-open');
     closeCart();
@@ -281,12 +298,25 @@
     };
 
     try {
+      const token = window.Session && Session.getToken();
+      if (!token) {
+        window.location.href = '/login.html';
+        return;
+      }
       const res = await fetch('/api/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
+      if (res.status === 401) {
+        Session.clear();
+        window.location.href = '/login.html';
+        return;
+      }
       if (!res.ok) throw new Error(data.error || 'Checkout failed');
 
       successName.textContent = payload.name;

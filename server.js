@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 
 const pool = require('./config/db');
-const { optionalAuth } = require('./config/authMiddleware');
+const { requireAuth } = require('./config/authMiddleware');
 const authRoutes = require('./routes/auth');
 const sellerProductRoutes = require('./routes/sellerProducts');
 const orderRoutes = require('./routes/orders');
@@ -65,10 +65,10 @@ app.get('/api/products/:id', async (req, res) => {
 });
 
 // ---------------------------------------------------------------
-// POST /api/checkout
+// POST /api/checkout  (requires a signed-in account)
 // body: { name, email, address, items: [{ id, quantity }] }
 // ---------------------------------------------------------------
-app.post('/api/checkout', optionalAuth, async (req, res) => {
+app.post('/api/checkout', requireAuth, async (req, res) => {
   const { name, email, address, items } = req.body;
 
   if (!name || !email || !address || !Array.isArray(items) || items.length === 0) {
@@ -103,7 +103,7 @@ app.post('/api/checkout', optionalAuth, async (req, res) => {
 
     const [orderResult] = await conn.query(
       'INSERT INTO orders (user_id, customer_name, customer_email, customer_address, total_amount) VALUES (?, ?, ?, ?, ?)',
-      [req.user ? req.user.id : null, name, email, address, total.toFixed(2)]
+      [req.user.id, name, email, address, total.toFixed(2)]
     );
     const orderId = orderResult.insertId;
 
