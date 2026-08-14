@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product — The General Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <header class="awning">
+    <div class="awning__inner">
+      <a class="brand" href="/index.html">
+        <span class="brand__mark">GS</span>
+        <span class="brand__name">The General Store</span>
+      </a>
+      <div class="account-slot" id="account-slot"></div>
+      <a class="cart-toggle" href="/index.html?openCart=1">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L4 3H2"/><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+        <span>Cart</span>
+        <span class="cart-toggle__count" id="cart-count">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="product-page">
+    <a href="/index.html" class="back-link">&larr; Back to catalog</a>
+    <div id="product-detail">
+      <p class="empty-state">Loading&hellip;</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>The General Store &middot; demo storefront &middot; no real payments are processed</p>
+  </footer>
+
+  <script src="/js/session.js"></script>
+  <script src="/js/product.js"></script>
+</body>
+</html>

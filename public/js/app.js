@@ -110,10 +110,12 @@
     return `
       <article class="product-card">
         <span class="product-card__tag">${escapeHtml(p.category)}</span>
-        <img class="product-card__img" src="${escapeHtml(p.image_url || '')}" alt="${escapeHtml(p.name)}" loading="lazy" />
+        <a href="/product.html?id=${p.id}" class="product-card__link" aria-label="View ${escapeHtml(p.name)}">
+          <img class="product-card__img" src="${escapeHtml(p.image_url || '')}" alt="${escapeHtml(p.name)}" loading="lazy" />
+        </a>
         <div class="product-card__body">
           <span class="product-card__sku">${escapeHtml(p.sku)}</span>
-          <h3 class="product-card__name">${escapeHtml(p.name)}</h3>
+          <h3 class="product-card__name"><a href="/product.html?id=${p.id}">${escapeHtml(p.name)}</a></h3>
           <p class="product-card__desc">${escapeHtml(p.description || '')}</p>
           <div class="product-card__footer">
             <span class="product-card__price">${money(p.price)}</span>
@@ -374,4 +376,9 @@
   // ---------------- Init ----------------
   renderCart();
   loadProducts();
+
+  if (new URLSearchParams(window.location.search).get('openCart') === '1') {
+    openCart();
+    window.history.replaceState({}, '', '/index.html');
+  }
 })();
